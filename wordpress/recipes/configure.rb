@@ -7,24 +7,25 @@
 
 
 node[:deploy].each do |application, deploy|
-
-  unless deploy.has_key(:wordpress)
-    Chef::Log.debug("Skipping wordpress::configure for #{application} as it is not a WordPress app")
+  unless deploy.has_key? :wordpress
+    Chef::Log.info("Skipping wordpress::configure for #{application} as it is not a WordPress app")
     next
   end
+  Chef::Log.info("Running wordpress::configure for #{application}")
+
 
   # Create wp-config.php
 
   # WordPress requires authentication keys for security. They need to be the same across all our app servers.
   authentication_keys = {
-    'AUTH_KEY': deploy[:wordpress][:auth_key],
-    'SECURE_AUTH_KEY': deploy[:wordpress][:secure_auth_key],
-    'LOGGED_IN_KEY': deploy[:wordpress][:logged_in_key],
-    'NONCE_KEY': deploy[:wordpress][:nonce_key],
-    'AUTH_SALT': deploy[:wordpress][:auth_key],
-    'SECURE_AUTH_SALT': deploy[:wordpress][:secure_auth_key],
-    'LOGGED_IN_SALT': deploy[:wordpress][:logged_in_salt],
-    'NONCE_SALT': deploy[:wordpress][:nonce_salt],
+    'AUTH_KEY' => deploy[:wordpress][:auth_key],
+    'SECURE_AUTH_KEY' => deploy[:wordpress][:secure_auth_key],
+    'LOGGED_IN_KEY' => deploy[:wordpress][:logged_in_key],
+    'NONCE_KEY' => deploy[:wordpress][:nonce_key],
+    'AUTH_SALT' => deploy[:wordpress][:auth_key],
+    'SECURE_AUTH_SALT' => deploy[:wordpress][:secure_auth_key],
+    'LOGGED_IN_SALT' => deploy[:wordpress][:logged_in_salt],
+    'NONCE_SALT' => deploy[:wordpress][:nonce_salt]
   }
 
   template "#{deploy[:deploy_to]}/shared/wp-config.php" do
@@ -38,13 +39,13 @@ node[:deploy].each do |application, deploy|
       owner 'apache'
     end
 
-    variables {
-      database_name: deploy[:database].fetch(:database),
-      database_username: deploy[:database].fetch(:username),
-      database_password: deploy[:database].fetch(:password),
-      database_host: deploy[:database].fetch(:host),
-      authentication_keys: authentication_keys
-    }
+    variables({
+      :database_name => deploy[:database].fetch(:database),
+      :database_username => deploy[:database].fetch(:username),
+      :database_password => deploy[:database].fetch(:password),
+      :database_host => deploy[:database].fetch(:host),
+      :authentication_keys => authentication_keys
+    })
 
     only_if do
       deploy[:database].present? && File.directory?("#{deploy[:deploy_to]}/shared/")
