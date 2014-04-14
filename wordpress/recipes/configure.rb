@@ -44,7 +44,8 @@ node[:deploy].each do |application, deploy|
       :database_username => deploy[:database].fetch(:username),
       :database_password => deploy[:database].fetch(:password),
       :database_host => deploy[:database].fetch(:host),
-      :authentication_keys => authentication_keys
+      :authentication_keys => authentication_keys,
+      :wordpress_table_prefix => deploy[:wordpress].fetch(:table_prefix, 'wp_')
     })
 
     only_if do
