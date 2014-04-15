@@ -9,10 +9,18 @@
 # - Use node[:apache][:error_log_destination] to tell apache to log errors to 'syslog:local7'
 
 
-unless deploy.has_key? :logentries
+unless node.has_key? :logentries
   Chef::Log.info("Skipping logentries::configure as there are no Logentries logs provided")
 else
   Chef::Log.info("Running logentries::configure")
+
+
+  # Register the rsyslog service
+
+  service 'rsyslog' do
+    supports :restart => true, :reload => true, :status => true
+    action   [:enable, :start]
+  end
 
 
   # Create /etc/rsyslog.d/99-logentries.conf
@@ -26,10 +34,9 @@ else
     variables({
       :logentries => node[:logentries]
     })
+
+    # Restart the rsyslog daemon.
+    notifies :restart, 'service[rsyslog]'
   end
-
-
-  # Restart the rsyslog daemon.
-  notifies :restart, 'service[rsyslog]'
 
 end
