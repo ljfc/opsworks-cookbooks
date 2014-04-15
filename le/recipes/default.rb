@@ -20,7 +20,7 @@ execute "echo 'deb http://rep.logentries.com/ maverick main' >/etc/apt/sources.l
 execute "gpg --keyserver pgp.mit.edu --recv-keys C43C79AD && gpg -a --export C43C79AD | apt-key add -"
 execute "apt-get update"
 execute "apt-get install --yes logentries"
-execute "le register --user-key #{node[:le][:userkey]} --name='#{node[:le][:hostname]}'"
+execute "le register --user-key #{node[:le][:userkey]} --name='#{node[:opsworks][:instance][:hostname]}'"
 execute "apt-get install --yes -qq logentries-daemon"
 
 class Chef::Recipe
