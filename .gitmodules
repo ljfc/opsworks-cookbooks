@@ -1,0 +1,3 @@
+[submodule "aws-opsworks-cookbooks"]
+	path = aws-opsworks-cookbooks
+	url = git@github.com:/aws/opsworks-cookbooks.git
