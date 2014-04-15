@@ -1,3 +1,6 @@
 [submodule "aws-opsworks-cookbooks"]
 	path = aws-opsworks-cookbooks
 	url = git@github.com:/aws/opsworks-cookbooks.git
+[submodule "logentries-cookbook"]
+	path = logentries-cookbook
+	url = git@github.com:/MarkLC/le_chef.git
