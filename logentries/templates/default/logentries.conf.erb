@@ -1,0 +1,15 @@
+#
+# Send logs, where appropriate, to logentries.com
+#
+<% @logentries.value.uniq.each do |token| -%>
+  <%# Each token needs a unique template name. %>
+  <% template_name = "Logentries#{token.gsub(/-/, '')}Format" -%>
+$template <%= template_name %>,"<%= token %> %HOSTNAME% %syslogtag%%msg%\n"
+<% end -%>
+
+<% @logentries.each do |log, token| -%>
+  <%# Use the correct template name. %>
+  <% template_name = "Logentries#{token.gsub(/-/, '')}Format" -%>
+<%= log %> @@api.logentries.com:10000;<% template_name -%>
+
+<% end -%>

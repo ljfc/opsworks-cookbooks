@@ -1,6 +1,6 @@
 # AWS OpsWorks recipe to be executed when configuring a WordPress application.
 #
-# This should be run as an additional configuration recipe on a standarf PHP App layer.
+# This should be run as an additional configuration recipe on a standard PHP App layer.
 #
 # - Creates an appropriate wp-config.php
 # - Creates a cron job to call wp-cron.php
